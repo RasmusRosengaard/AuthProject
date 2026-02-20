@@ -27,7 +27,7 @@ namespace webapi.Controllers
                 return Conflict("Email already exists");
             }
 
-            User user = new User
+            User user = new()
             {
                 Email = userDTO.Email,
                 Password = userDTO.Password,
@@ -36,19 +36,24 @@ namespace webapi.Controllers
 
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
-            return Ok();
+            return Ok(new { user.Email });
         }
 
 
         [HttpPost("login")]
-        public ActionResult<UserDTO> Login([FromBody] UserDTO userDTO)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] UserDTO userDTO)
         {
-            // check if user exist and role
-            // if admin: redirect user to admin page in frontend
-            // if default: redirect user to normal dashboard in frontend
 
-            return userDTO;
-        } 
+            var user = await _db.Users
+                .FirstOrDefaultAsync(u => u.Email == userDTO.Email && u.Password == userDTO.Password);
+
+            if (user == null)
+            {
+                return Unauthorized("Wrong email or password");
+            }
+
+            return Ok(new { user.Id, user.Email, user.Role });
+        }
 
     }
 }
