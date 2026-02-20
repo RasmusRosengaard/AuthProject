@@ -1,12 +1,12 @@
 ## API
 
 ### webapi
-API'en er forsøg på at lave et hjemmelavet auth API, som skal fungere som backend til et website.
-Denne API bruger SQLite som database og peger på en lokal mappe. 
-Den bruger Docker volumes, så dataen er persistent. 
-Databasen oprettes automatisk på den angivne placering, hvis den ikke allerede findes, via Entity Framework.
+API'en er et forsøg på at lave et hjemmelavet auth API, som skal fungere som backend til et website.
 
-I API'en findes der allerede 2 compose filer. Disse er eksempler
+Anvender SQLite som database, docker volumes for persistent data, hvis man ønsker at køre den i docker.
+Database oprettes automatisk med entityframework, på den placering man vælger i docker compose eller i program.cs.
+
+Grundet til valg af docker, nemt at oprette flere instanser af denne API, blot lav en ny docker compose fil, hvis jeg vil anvende den til flere websiden med forskellige databaser.
 
 ### Kørsel med Docker Compose
 For at starte API'en:
