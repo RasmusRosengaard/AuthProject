@@ -1,13 +1,10 @@
 services:
-  api:
+  api-prod:
     build: .
     ports:
       - "8081:8080"
     volumes:
-      - C:\Users\rasmu\docker-volumes\webapi-data:/data
+      - C:\Users\rasmu\docker-volumes\webapi-data\prod:/data
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
       - DB_PATH=/data/auth-prod.db
-
-# Start prod/test
-# docker compose -f docker-compose.prod.yml up -d --build
+      - ASPNETCORE_ENVIRONMENT=Development

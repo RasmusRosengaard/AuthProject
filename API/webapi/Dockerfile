@@ -1,24 +1,21 @@
-# ---------- Build stage ----------
+# Base image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+WORKDIR /app
+EXPOSE 8080
+
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-
-# Kopiér csproj først (bedre cache)
-COPY *.csproj .
+COPY ["./", "./"]
 RUN dotnet restore
-
-# Kopiér resten
-COPY . .
 RUN dotnet publish -c Release -o /app/publish
 
-# ---------- Runtime stage ----------
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+# Runtime stage
+FROM base AS final
 WORKDIR /app
-
 COPY --from=build /app/publish .
 
-# Mappe til SQLite database (volume mount)
-RUN mkdir /data
-
-EXPOSE 8080
+ENV DB_PATH=/data/auth.db
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 ENTRYPOINT ["dotnet", "webapi.dll"]
