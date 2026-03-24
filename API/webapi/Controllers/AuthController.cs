@@ -5,7 +5,7 @@ using webapi.Models;
 namespace webapi.Controllers
 {
     [ApiController]
-    [Route("auth")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
