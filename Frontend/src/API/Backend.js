@@ -11,7 +11,7 @@ export async function LoginAPI(email, password) {
     });
 
     if (!response.ok) {
-        const text = await response.text(); // get backend error message
+        const text = await response.text(); 
         throw new Error(`Login failed: ${text}`);
     }
 

@@ -26,7 +26,7 @@ function login() {
     LoginAPI(email.value, password.value)
         .then(data => {
             if (data) {
-                localStorage.setItem('user', JSON.stringify(data)   );
+                localStorage.setItem('user', JSON.stringify(data));
                 router.push('/dashboard');
 
             }
