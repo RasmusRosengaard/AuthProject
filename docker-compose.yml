@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  api-dev:
+    build:
+      context: ./API/webapi      # <-- path where Dockerfile actually is
+      dockerfile: Dockerfile     # <-- optional if exactly named "Dockerfile"
+    ports:
+      - "8080:8080"
+    volumes:
+      - C:\Users\rasmu\docker-volumes\webapi-data\dev:/data
+    environment:
+      - DB_PATH=/data/auth-dev.db
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+
+  frontend-dev:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api-dev
+    networks:
+      - app-network
+    command: npm run dev -- --host 0.0.0.0
+    # remove the volume for now
+    # volumes:
+    #   - ./Frontend:/app
+
+networks:
+  app-network:
+    driver: bridge
