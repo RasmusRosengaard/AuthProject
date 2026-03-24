@@ -17,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.WebHost.UseUrls("http://+:8080");
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
