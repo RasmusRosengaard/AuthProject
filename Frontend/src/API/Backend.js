@@ -1,14 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
-
-// ✅ Helper to include token
-function getAuthHeaders() {
-    const token = localStorage.getItem('token');
-
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
-}
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5237/api";
 
 export async function LoginAPI(email, password) {
     const response = await fetch(`${API_BASE}/auth/login`, {
@@ -44,16 +34,3 @@ export async function RegisterAPI(email, password) {
     return await response.json();
 }
 
-export async function GetMe() {
-    const response = await fetch(`${API_BASE}/auth/me`, {
-        method: 'GET',
-        headers: getAuthHeaders()
-    });
-
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Request failed: ${text}`);
-    }
-
-    return await response.json();
-}
