@@ -4,35 +4,52 @@ import Login from '../Pages/Login.vue';
 import Register from '@/Pages/Register.vue';
 import FrontPage from '@/Pages/FrontPage.vue';
 
-
-
 const routes = [
-    { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-    { path: '/login', name: 'Login', component: Login },
-    { path: '/register', name: 'Register', component: Register },
-    { path: '/', name: 'FrontPage', component: FrontPage }
+    {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: Dashboard,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login,
+        meta: { guestOnly: true } 
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register,
+        meta: { guestOnly: true }
+    },
+    {
+        path: '/',
+        name: 'FrontPage',
+        component: FrontPage
+    }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+    history: createWebHistory(),
+    routes
 });
 
 router.beforeEach((to, from, next) => {
-    const loggedIn = !!localStorage.getItem('user');
+    const token = localStorage.getItem('token');
 
-    // Pages that should be blocked if logged in
-    const guestPages = ['/login', '/register'];
+    const isAuthenticated = !!token;
 
-    if (loggedIn && guestPages.includes(to.path)) {
-        // Redirect logged-in users away from login/register
-        next('/dashboard');
-    } else if (to.path === '/dashboard' && !loggedIn) {
-        // Redirect non-logged-in users away from dashboard
-        next('/'); // or '/login'
-    } else {
-        next(); // allow navigation
+    if (to.meta.guestOnly && isAuthenticated) {
+        return next('/dashboard');
     }
+
+    // 🔒 Protect routes
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        return next('/login');
+    }
+
+    next();
 });
 
 export default router;

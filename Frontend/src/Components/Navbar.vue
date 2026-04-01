@@ -22,27 +22,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const loggedIn = ref(false);
+const loggedIn = ref(!!localStorage.getItem('token'));
 
-onMounted(() => {
-  loggedIn.value = !!localStorage.getItem('user');
+
+watchEffect(() => {
+  loggedIn.value = !!localStorage.getItem('token');
 });
 
 function logout() {
-  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  router.replace('/'); 
   loggedIn.value = false;
-  router.replace('/');
 }
 </script>
 
 <style>
 nav {
   display: flex;
-  justify-content: space-between; /* left vs right */
+  justify-content: space-between;
   align-items: center;
   background-color: #333;
   padding: 10px 20px;

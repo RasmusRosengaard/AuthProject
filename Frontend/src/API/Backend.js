@@ -1,5 +1,14 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/api"; 
-// In Docker Compose, API calls should use: "http://api-dev:8080/api"
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+
+// ✅ Helper to include token
+function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
 
 export async function LoginAPI(email, password) {
     const response = await fetch(`${API_BASE}/auth/login`, {
@@ -11,7 +20,7 @@ export async function LoginAPI(email, password) {
     });
 
     if (!response.ok) {
-        const text = await response.text(); 
+        const text = await response.text();
         throw new Error(`Login failed: ${text}`);
     }
 
@@ -30,6 +39,20 @@ export async function RegisterAPI(email, password) {
     if (!response.ok) {
         const text = await response.text();
         throw new Error(`Registration failed: ${text}`);
+    }
+
+    return await response.json();
+}
+
+export async function GetMe() {
+    const response = await fetch(`${API_BASE}/auth/me`, {
+        method: 'GET',
+        headers: getAuthHeaders()
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Request failed: ${text}`);
     }
 
     return await response.json();

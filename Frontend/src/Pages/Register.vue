@@ -2,12 +2,11 @@
     <Navbar></Navbar>
     <div class="register-form">
         <h1>Register</h1>
-        <input v-model="email"  type="text" placeholder="Email" />
+        <input v-model="email" type="text" placeholder="Email" />
         <input v-model="password" type="password" placeholder="Password" />
 
         <button @click="register">Register</button>
     </div>
-
 </template>
 
 <script setup>
@@ -22,25 +21,15 @@ const router = useRouter();
 
 function register() {
     RegisterAPI(email.value, password.value)
-        .then(() => {
-            console.log('Registration successful');
-            LoginAPI(email.value, password.value)
-                .then(data => {
-                    if (data) {
-                        localStorage.setItem('user', JSON.stringify(data));
-                        router.push('/dashboard');
-                    }
-                })
-                .catch(err => {
-                    console.error('Login after registration failed:', err);
-                });
-            router.push('/dashboard');
+        .then(() => LoginAPI(email.value, password.value)) 
+        .then(data => {
+            if (data?.token) {
+                localStorage.setItem('token', data.token);
+                router.push('/dashboard');
+            }
         })
-        .catch((error) => {
-            
-            console.error('Registration failed:', error);
+        .catch(err => {
+            console.error('Registration/Login failed:', err);
         });
 }
-
-
 </script>
