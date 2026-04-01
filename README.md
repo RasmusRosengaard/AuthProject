@@ -5,4 +5,9 @@ The purpose of this project is to demonstrate a simple frontend-backend authenti
 Another purpose is for me to be able to quickly set up websites that require user handling for future projects.
 
 
-The future plan for the project, update both API And frontenc to use a token based auth system, as it is way more secure. 
+IMPORTANT 
+- Make sure your frontend runs on the port defined in program.cs to allow frontend to send Http request to backend. (:5173)
+
+
+If you want to use token based backend, use the branch "feat/tokenbased"
+- This version uses a local SQL database instead of SQLite
