@@ -1,5 +1,24 @@
-his project is my implementation of an easy setup Vue frontend with .NET Core Web API.
+This branch uses JWT tokens for authorization instead of saving the user's email directly in localStorage.
 
-The purpose of this project is to demonstrate a simple frontend-backend authentication flow, showing how login, registration, and basic user state can work together in a Vue application with a .NET Core API.
+It still uses localStorage to store the token, to minimize backend requests.
+Uses a SQL database, JWT tokens, and Entity Framework.
 
-Another purpose is for me to be able to quickly set up websites that require user handling for future projects.
+IMPORTANT:
+
+Make sure your frontend runs on the port defined in Program.cs to allow it to send HTTP requests to the backend (default: :5173).
+
+To run:
+
+Navigate to the webapi/ folder and run:
+
+dotnet run
+
+Navigate to the Frontend/ folder and run:
+
+npm run dev
+
+This setup is intended for development purposes only.
+
+Future work:
+
+Focus on applying SOLID principles where they make sense to improve testing and scalability.
