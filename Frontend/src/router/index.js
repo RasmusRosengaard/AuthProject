@@ -44,7 +44,6 @@ router.beforeEach((to, from, next) => {
         return next('/dashboard');
     }
 
-    // 🔒 Protect routes
     if (to.meta.requiresAuth && !isAuthenticated) {
         return next('/login');
     }

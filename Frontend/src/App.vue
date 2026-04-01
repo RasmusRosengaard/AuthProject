@@ -5,9 +5,12 @@
 <script setup>
 import { onMounted } from 'vue';
 import { checkToken } from './Services/JWTService';
+import { useRouter } from 'vue-router';
+
+const router = useRouter(); 
 
 onMounted(() => {
-  checkToken(); 
+  checkToken(router); 
 });
 
 </script>

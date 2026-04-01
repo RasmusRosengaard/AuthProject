@@ -1,6 +1,3 @@
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 export function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -19,12 +16,12 @@ export function parseJwt(token) {
 export function isTokenExpired(token) {
     if (!token) return true;
     const payload = JSON.parse(atob(token.split('.')[1]));
-    const exp = payload.exp; // expiration timestamp in seconds
-    const now = Math.floor(Date.now() / 1000); // current time in seconds
+    const exp = payload.exp; 
+    const now = Math.floor(Date.now() / 1000);
     return now >= exp;
 }
 
-export function checkToken() {
+export function checkToken(router) {
   const token = localStorage.getItem('token');
   if (!token || isTokenExpired(token)) {
     localStorage.removeItem('token');
