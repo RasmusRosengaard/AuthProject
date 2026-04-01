@@ -30,6 +30,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
+            // Allows request from Vue frontend, adjust the URL if your frontend runs on a different port
+            // You can choose the port API should run on in launchSettings.json
             policy.WithOrigins("http://localhost:5173")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
