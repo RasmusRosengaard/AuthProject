@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace webapi.Controllers
 {
@@ -13,10 +14,12 @@ namespace webapi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IUserRepository userRepository)
+        public AuthController(IUserRepository userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
+            _configuration = configuration;
         }
 
         [HttpPost("create")]
@@ -55,12 +58,15 @@ namespace webapi.Controllers
 
             var token = GenerateJwtToken(user);
 
-            return Ok(new { token }); // ✅ Only return token
+            return Ok(new { token }); // only token, role/id are in claims
         }
 
         private string GenerateJwtToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("THIS_IS_MY_SUPER_LONG_SECRET_KEY_FOR_AUTH_2026"));
+            var keyString = _configuration["JwtSettings:SecretKey"];
+            var expiryHours = int.Parse(_configuration["JwtSettings:ExpiryHours"] ?? "24");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -72,7 +78,7 @@ namespace webapi.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(24),
+                expires: DateTime.UtcNow.AddHours(expiryHours),
                 signingCredentials: creds
             );
 
